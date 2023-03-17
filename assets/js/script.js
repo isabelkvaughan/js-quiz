@@ -28,10 +28,10 @@ var quizQuestions = [
 ];
 
 //startQuiz
-var startQuiz = function() {
+var startQuiz = function(currentQuestionID) {
   console.log('starting quiz');
-  var currentQuestionIndex = 0;
-  var question = quizQuestions[currentQuestionIndex];
+
+  var question = quizQuestions[currentQuestionID];
   var questionElement = document.createElement("div");
   questionElement.textContent = question.question;
   document.getElementById("questions").appendChild(questionElement);
@@ -52,10 +52,18 @@ var startQuiz = function() {
         feedbackElement.textContent = "Incorrect!";
         document.getElementById("questions").appendChild(feedbackElement);
         timeLeft = timeLeft - 10;
-      }      
+      }
+      if (currentQuestionID === (quizQuestions.length)-1) {
+// end timer
+// remove questions
+// show form to add intials and submit high score
+      }
+      else {
+        startQuiz(currentQuestionID+1);
+      }
     });
-  }
-};  
+  };
+}
 
 
 //intro screen
@@ -77,7 +85,7 @@ startButton.addEventListener("click", () => {
   console.log('test');
   introScreen.remove();
   startTimer();
-  startQuiz();
+  startQuiz(0);
 });
 
 
@@ -94,5 +102,3 @@ function startTimer() {
     }
   }, 1000);
 }
-
-

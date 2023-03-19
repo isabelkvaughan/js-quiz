@@ -28,35 +28,47 @@ var quizQuestions = [
 ];
 
 //startQuiz
+var score = 0;
+
 var startQuiz = function(currentQuestionID) {
-  console.log('starting quiz');
-
-  var question = quizQuestions[currentQuestionID];
+  
+  // create quizElement
+  var quizElement = document.createElement("div");
+  document.getElementById("questions").appendChild(quizElement);
   var questionElement = document.createElement("div");
+  
+  // create questionElement
+  var question = quizQuestions[currentQuestionID];
   questionElement.textContent = question.question;
-  document.getElementById("questions").appendChild(questionElement);
-
+  quizElement.appendChild(questionElement);
+  
+  // for loop to add answer buttons
   for (var i = 0; i < question.answers.length; i++) {
     var choice = question.answers[i];
     var choiceElement = document.createElement("button");
     choiceElement.textContent = choice;
-    document.getElementById("questions").appendChild(choiceElement);
+    quizElement.appendChild(choiceElement);
 
+  // click event for feedback
     choiceElement.addEventListener("click", (event) => {
       if (event.target.textContent === question.correctAnswer) {
         var feedbackElement = document.createElement("div");
         feedbackElement.textContent = "Correct!";
-        document.getElementById("questions").appendChild(feedbackElement);
+        quizElement.appendChild(feedbackElement);
       } else {
         var feedbackElement = document.createElement("div");
         feedbackElement.textContent = "Incorrect!";
-        document.getElementById("questions").appendChild(feedbackElement);
+        quizElement.appendChild(feedbackElement);
         timeLeft = timeLeft - 10;
       }
+
       if (currentQuestionID === (quizQuestions.length)-1) {
-// end timer
-// remove questions
-// show form to add intials and submit high score
+  // end timer
+        clearInterval(timerInterval);
+  // remove questions
+        quizElement.remove();
+  // show form to add intials and submit high score
+        endQuiz();
       }
       else {
         startQuiz(currentQuestionID+1);
@@ -101,4 +113,30 @@ function startTimer() {
       clearInterval(timerInterval);
     }
   }, 1000);
+}
+
+//endQuiz and show form
+
+function endQuiz() {
+  var formContainer = document.getElementById("form-container");
+  formContainer.classList.remove("hidden");
+  //create label
+  var initialsLabel = document.createElement("label");
+  initialsLabel.textContent = "Enter your initials:";
+  formContainer.appendChild(initialsLabel);
+  //create Initials input
+  var initialsInput = document.createElement("input");
+  initialsInput.textContent = "";
+  formContainer.appendChild(initialsInput);
+  // create initials submit button
+  var initialsSubmit = document.createElement("button");
+  initialsSubmit.textContent = "SUBMIT";
+  formContainer.appendChild(initialsSubmit);
+  // create eventListener onClick for submit button
+  initialsSubmit.addEventListener("click", event => {
+    event.preventDefault();
+    var initials = initialsInput.value;
+    localStorage.setItem("quizScore", `${initials}: ${score}`);
+    location.reload();
+  });
 }

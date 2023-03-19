@@ -10,6 +10,12 @@ JavaScript multiple choice quiz with a 90 second timer. 10 seconds deducted for 
 
 Quiz questions taken from here: [https://www.interviewbit.com/javascript-mcq/](https://www.interviewbit.com/javascript-mcq/)
 
+## Mock-Up
+
+The following image shows the web application's appearance and functionality:
+
+![JavaScript quiz heading and blur. Start Quiz button sits below.](./assets/images/screenshot.png)
+
 ## Installation & Links
 
 Deployed Application: [isabelkvaughan.github.io/js-quiz](https://isabelkvaughan.github.io/js-quiz/)

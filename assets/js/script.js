@@ -1,29 +1,29 @@
 //questions
 var quizQuestions = [
   {
-    question: "Question 1",
-    answers: ["A", "B", "C", "D"],
-    correctAnswer: "A",
+    question: "Question 1: Javascript is an _______ language?",
+    answers: ["Object Oriented", "Object Based", "Procedural", "No answers apply"],
+    correctAnswer: "Object Oriented",
   },
   {
-    question: "Question 2",
-    answers: ["A", "B", "C", "D"],
-    correctAnswer: "B",
+    question: "Question 2: Which of the following keywords is used to define a variable in Javascript?",
+    answers: ["var", "let", "A and B", "No answers apply"],
+    correctAnswer: "A and B",
   },
   {
-    question: "Question 3",
-    answers: ["A", "B", "C", "D"],
-    correctAnswer: "C",
+    question: "Question 3: Which of the following methods is used to access HTML elements using Javascript?",
+    answers: ["getElementById()", "getElementsByClassName", "A and B", "No answers apply"],
+    correctAnswer: "A and B",
   },
   {
-    question: "Question 4",
-    answers: ["A", "B", "C", "D"],
-    correctAnswer: "D",
+    question: "Question 4: Upon encountering empty statements, what does the Javascript Interpreter do?",
+    answers: ["Throws and error", "Ignores the statement", "Gives a warning", "No answers apply"],
+    correctAnswer: "Ignores the statement",
   },
   {
-    question: "Question 5",
-    answers: ["A", "B", "C", "D"],
-    correctAnswer: "A",
+    question: "Question 5: Which of the following methods can be used to display data in some form using Javascript?",
+    answers: ["document.write()", "console.log()", "window.alert()", "All answers apply"],
+    correctAnswer: "All answers apply",
   },
 ];
 
@@ -52,26 +52,30 @@ var startQuiz = function(currentQuestionID) {
   // click event for feedback
     choiceElement.addEventListener("click", (event) => {
       if (event.target.textContent === question.correctAnswer) {
-        var feedbackElement = document.createElement("div");
+        var feedbackElement = document.getElementById("feedback");
         feedbackElement.textContent = "Correct!";
-        quizElement.appendChild(feedbackElement);
+        console.log("test 1")
+        score++;
+        console.log(score);
       } else {
-        var feedbackElement = document.createElement("div");
+        var feedbackElement = document.getElementById("feedback");
         feedbackElement.textContent = "Incorrect!";
-        quizElement.appendChild(feedbackElement);
         timeLeft = timeLeft - 10;
+        console.log("test 2")
       }
+      quizElement.remove();
 
       if (currentQuestionID === (quizQuestions.length)-1) {
   // end timer
         clearInterval(timerInterval);
   // remove questions
-        quizElement.remove();
+        feedbackElement.remove();
   // show form to add intials and submit high score
         endQuiz();
       }
       else {
         startQuiz(currentQuestionID+1);
+        
       }
     });
   };
@@ -118,11 +122,16 @@ function startTimer() {
 //endQuiz and show form
 
 function endQuiz() {
-  var formContainer = document.getElementById("form-container");
+  var formContainer = document.getElementById("submit-score");
   formContainer.classList.remove("hidden");
+  
+  var showScore = document.getElementById("score")
+  showScore.textContent = score;
+
+
   //create label
   var initialsLabel = document.createElement("label");
-  initialsLabel.textContent = "Enter your initials:";
+  initialsLabel.textContent = "Enter your initials: ";
   formContainer.appendChild(initialsLabel);
   //create Initials input
   var initialsInput = document.createElement("input");
@@ -132,11 +141,22 @@ function endQuiz() {
   var initialsSubmit = document.createElement("button");
   initialsSubmit.textContent = "SUBMIT";
   formContainer.appendChild(initialsSubmit);
+  
   // create eventListener onClick for submit button
   initialsSubmit.addEventListener("click", event => {
     event.preventDefault();
     var initials = initialsInput.value;
-    localStorage.setItem("quizScore", `${initials}: ${score}`);
-    location.reload();
+
+    var userData = {
+      initials:initials,
+      score:score
+    }
+    
+    var localStorageData = JSON.parse(localStorage.getItem("quizScore")) || [];
+    localStorageData.push(JSON.stringify(userData));
+
+    localStorage.setItem("quizScore", localStorageData);
+    //location.reload();
+    
   });
 }
